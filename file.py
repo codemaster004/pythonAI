@@ -1,16 +1,4 @@
 import random
-import hashlib
-
-
-# random.seed('hej')
-#
-# my_hash = hashlib.sha1()
-# my_hash.update(b'Hell')
-# hashed = my_hash.digest()
-# print(hashed)
-#
-# my_list = list(bytes(hashed))
-# print(my_list)
 
 
 def random_coding():

@@ -11,12 +11,29 @@ final_directory = '/Users/fd/Documents/Python/PyAutomation/coded_files'
 
 def code_and_move_file(src, filename):
     print('...Coding file...')
-    x = random.randint(1, 255)
     with open(src, 'rb') as file:
         data = file.read()
-        my_list = list(bytes(data))
-        my_list = [i + x if i + x <= 255 else i + x - 256 for i in my_list]
-        new_bytes = bytes(my_list)
+        byte_list = list(bytes(data))
+
+        my_seed = byte_list[0] * 4096 + byte_list[1] * 256 + byte_list[2] * 16 + byte_list[3]
+
+        random.seed(my_seed)
+
+        randoms = []
+
+        def get_r(index):
+            if index + 1 > len(randoms):
+                if index > 3:
+                    randoms.append(random.randint(1, 255))
+                else:
+                    randoms.append(0)
+            return randoms[index]
+
+        byte_list = [byte_list[i] + get_r(i) if byte_list[i] + get_r(i) <= 255 else byte_list[i] + get_r(i) - 256 for i
+                     in range(len(byte_list))]
+
+        new_bytes = bytes(byte_list)
+
         with open(f'{final_directory}/{filename.split(".")[0]}.txt', 'wb') as copy:
             copy.write(new_bytes)
         print('...File successfully coded and moved...')
