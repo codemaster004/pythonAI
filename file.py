@@ -1,94 +1,34 @@
-import random
+import numpy as np
+from PIL import Image
 
 
-def random_coding():
-    with open('test/todo-code.txt', 'rb') as file:
-        data = file.read()
-        byte_list = list(bytes(data))
+def image_to_vector(src):
+    img = Image.open(src).convert('RGB')to_vector('../testingData/img0.JPG
+    arr = np.array(img)
 
-        my_seed = byte_list[0] * 4096 + byte_list[1] * 256 + byte_list[2] * 16 + byte_list[3]
+    single_d_vector = arr.ravel()
 
-        random.seed(my_seed)
-
-        randoms = []
-
-        def get_r(index):
-            if index + 1 > len(randoms):
-                if index > 3:
-                    randoms.append(random.randint(1, 255))
-                else:
-                    randoms.append(0)
-            return randoms[index]
-
-        byte_list = [byte_list[i] + get_r(i) if byte_list[i] + get_r(i) <= 255 else byte_list[i] + get_r(i) - 256 for i
-                     in range(len(byte_list))]
-
-        new_bytes = bytes(byte_list)
-
-        with open('test/coded.txt', 'wb') as copy:
-            copy.write(new_bytes)
+    return single_d_vector
 
 
-def random_decoding():
-    with open('test/todo-decode.txt', 'rb') as file:
-        data = file.read()
-        byte_list = list(bytes(data))
+A = image_to_vector('../testingData/img0.JPG')
+B = image_')
+# A = np.array([10, 15, 3])
+# B = np.array([10, 15, 3])
 
-        my_seed = byte_list[0] * 4096 + byte_list[1] * 256 + byte_list[2] * 16 + byte_list[3]
+cos_sim = np.dot(A, B) / (np.linalg.norm(A) * np.linalg.norm(B))
+print(f"Cosine Similarity between A and B:{np.round(cos_sim, 2)}")
+print(f"Cosine Distance between A and B:{np.round(1 - cos_sim, 2)}")
 
-        random.seed(my_seed)
-
-        randoms = []
-
-        def get_r(index):
-            if index + 1 > len(randoms):
-                if index > 3:
-                    randoms.append(random.randint(1, 255))
-                else:
-                    randoms.append(0)
-            return randoms[index]
-
-        byte_list = [byte_list[i] - get_r(i) if byte_list[i] - get_r(i) >= 0 else byte_list[i] - get_r(i) + 256 for i in
-                     range(len(byte_list))]
-
-        new_bytes = bytes(byte_list)
-
-        with open('test/decoded.txt', 'wb') as copy:
-            copy.write(new_bytes)
-
-
-def normal_coding():
-    with open('codeTest.txt', 'rb') as file:
-        data = file.read()
-        byte_list = list(bytes(data))
-
-        r = 7
-        byte_list = [i + r if i + r <= 255 else i + r - 256 for i in byte_list]
-
-        new_bytes = bytes(byte_list)
-
-        with open('decodeTest.txt', 'wb') as copy:
-            copy.write(new_bytes)
-
-
-def normal_decoding():
-    with open('decodeTest.txt', 'rb') as file:
-        data = file.read()
-        byte_list = list(bytes(data))
-
-        r = 7
-        byte_list = [i - r if i - r >= 0 else i - r + 256 for i in byte_list]
-
-        new_bytes = bytes(byte_list)
-
-        with open('codeTest.txt', 'wb') as copy:
-            copy.write(new_bytes)
-
-
-# normal_coding()
+# convert it to a matrix
+# vector = np.matrix(flat_arr)
 #
-# normal_decoding()
-
-# random_coding()
+# # do something to the vector
+# vector[:, ::10] = 128
 #
-# random_decoding()
+# # reform a numpy array of the original shape
+# arr2 = np.asarray(vector).reshape(shape)
+# print(arr2)
+# # make a PIL image
+# # img2 = Image.fromarray(arr2, 'RGBA')
+# # img2.show()

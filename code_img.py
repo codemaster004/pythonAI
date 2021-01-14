@@ -11,6 +11,23 @@ final_directory = '/Users/fd/Documents/Python/PyAutomation/coded_files'
 
 def code_and_move_file(src, filename):
     print('...Coding file...')
+    x = random.randint(1, 255)
+    with open(src, 'rb') as file:
+        data = file.read()
+        my_list = list(bytes(data))
+        my_list = [i + x if i + x <= 255 else i + x - 256 for i in my_list]
+        new_bytes = bytes(my_list)
+        with open(f'{final_directory}/{filename.split(".")[0]}.txt', 'wb') as copy:
+            copy.write(new_bytes)
+        print('...File successfully coded and moved...')
+
+        os.remove(f'{folder_to_track}/{filename}')
+        print('...Base file successfully removed...')
+        print('Done!\n')
+
+
+def random_code_and_move_file(src, filename):
+    print('...Coding file...')
     with open(src, 'rb') as file:
         data = file.read()
         byte_list = list(bytes(data))
@@ -49,10 +66,15 @@ class MyHandler(FileSystemEventHandler):
         for filename in os.listdir(folder_to_track):
             src = f'{folder_to_track}/{filename}'
             if filename[0] != '.':
-                code_and_move_file(src, filename)
+                random_code_and_move_file(src, filename)
 
 
 if __name__ == '__main__':
+    for filename in os.listdir(folder_to_track):
+        src = f'{folder_to_track}/{filename}'
+        if filename[0] != '.':
+            random_code_and_move_file(src, filename)
+
     print('Folder monitoring begun\n')
     event_handler = MyHandler()
     observer = Observer()
